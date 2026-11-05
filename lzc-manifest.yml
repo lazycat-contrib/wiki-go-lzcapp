@@ -1,0 +1,42 @@
+application:
+  subdomain: wiki-go
+  multi_instance: false
+  # Wiki-Go has its own account system, but the first run creates a hard-coded
+  # admin/admin account that no environment variable can override, so this
+  # package stays behind the platform login gate instead of using public_path.
+  upstreams:
+    - location: /package-licenses/
+      backend: file:///lzcapp/pkg/content/licenses/
+    - location: /
+      backend: http://wiki-go:8080/
+
+services:
+  wiki-go:
+    # upstream: leomoonstudios/wiki-go:1.9.2
+    image: docker.1ms.run/leomoonstudios/wiki-go:1.9.2
+    environment:
+      - TZ=Asia/Shanghai
+    binds:
+      - /lzcapp/var/wiki:/wiki/data
+
+usage: |
+  Wiki-Go 是一个 Markdown 知识库：左侧文件树，右侧实时渲染，
+  支持看板（Kanban）、全文搜索、版本历史、评论和内置编辑器。
+
+  使用方法：
+  1. 打开应用，用默认账号登录：**admin / admin**
+  2. **第一件事就是改密码**：右上角菜单 → 用户设置 → 修改密码。
+     这个默认口令写死在程序里，无法通过任何环境变量覆盖，
+     所以本应用没有对外开放，只能从懒猫平台的入口进入。
+  3. 左侧新建页面，直接用 Markdown 写内容，保存即生效。
+
+  数据与安全：
+  - 全部内容（配置、Markdown 文档、附件、缩略图）都在 /lzcapp/var/wiki，
+    随应用持久化；卸载应用会一并删除，请自行备份。
+  - 未使用 public_path：应用直接对外开放会带着 admin/admin 这个弱默认口令，
+    因此保留平台入口鉴权，作为第一道防线。
+  - 单容器运行，无外部数据库。
+
+  说明：
+  - 未做实机验证：登录、改密码、页面编辑、附件上传、
+    以及重启后数据持久化均未在设备上实测。

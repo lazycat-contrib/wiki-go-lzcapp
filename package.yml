@@ -1,0 +1,18 @@
+package: community.lazycat.app.wiki-go
+name: Wiki-Go
+version: 0.0.0
+description: "Single-binary Markdown wiki with file tree, kanban boards, version history and full-text search."
+min_os_version: "1.5.0"
+homepage: https://wikigo.leomoon.com
+author: leomoon-studios
+license: GPL-3.0
+permissions:
+  required:
+    - net.internet
+locales:
+  zh:
+    name: Wiki-Go
+    description: "单文件 Markdown 知识库：文件树、看板、版本历史与全文搜索。"
+  en:
+    name: Wiki-Go
+    description: "Single-binary Markdown wiki with file tree, kanban boards, version history and full-text search."
